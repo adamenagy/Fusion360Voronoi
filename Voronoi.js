@@ -9,21 +9,6 @@ MIT License: See https://github.com/hanskellner/Fusion360Voronoi/LICENSE.md
 /*
 This is a script for Autodesk Fusion 360 that generates Voronoi sketches.
 
-Installation:
-
-Copy the "Voronoi" fodler into your Fusion 360 "My Scripts" folder. You may find this folder using the following steps:
-
-1) Start Fusion 360 and then select the File -> Scripts... menu item
-2) The Scripts Manager dialog will appear and display the "My Scripts" folder and "Sample Scripts" folders
-3) Select one of the "My Scripts" files and then click on the "+" Details icon near the bottom of the dialog.
-  a) If there are no files in the "My Scripts" folder then create a default one.
-  b) Click the Create button, select JavaScript, and then OK.
-5) With the user script selected, click the Full Path "..." button to display a file explorer window that will display the "My Scripts" folder
-6) Copy the files into the folder
-
-For example, on a Mac the folder is located in:
-/Users/USERNAME/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts
-
 Credits:
 
 This code makes use of the Raymond Hill's well done Javascript-Voronoi code:
@@ -31,8 +16,54 @@ https://github.com/gorhill/Javascript-Voronoi
 */
 
 /*globals adsk*/
-(function () {
 
+var commandId = 'VoronoiSketchGenerator';
+var workspaceToUse = 'FusionSolidEnvironment';
+var panelToUse = 'SolidCreatePanel';
+
+var errorDescription = function(e) {
+    return (e.description ? e.description : e);
+};
+
+var commandDefinitionById = function(id) {
+    var app = adsk.core.Application.get();
+    var ui = app.userInterface;
+    if (!id) {
+        ui.messageBox('commandDefinition id is not specified');
+        return null;
+    }
+    var commandDefinitions_ = ui.commandDefinitions;
+    var commandDefinition_ = commandDefinitions_.itemById(id);
+    return commandDefinition_;
+};
+
+var commandControlById = function(id) {
+    var app = adsk.core.Application.get();
+    var ui = app.userInterface;
+    if (!id) {
+        ui.messageBox('commandControl id is not specified');
+        return null;
+    }
+    var workspaces_ = ui.workspaces;
+    var modelingWorkspace_ = workspaces_.itemById(workspaceToUse);
+    var toolbarPanels_ = modelingWorkspace_.toolbarPanels;
+    var toolbarPanel_ = toolbarPanels_.itemById(panelToUse);
+    var toolbarControls_ = toolbarPanel_.controls;
+    var toolbarControl_ = toolbarControls_.itemById(id);
+    return toolbarControl_;
+};
+
+var destroyObject = function(uiObj, tobeDeleteObj) {
+    if (uiObj && tobeDeleteObj) {
+        if (tobeDeleteObj.isValid) {
+            tobeDeleteObj.deleteMe();
+        } else {
+            uiObj.messageBox('tobeDeleteObj is not a valid object');
+        }
+    }
+};
+
+function run(context) {
     "use strict";
 
     if (adsk.debug === true) {
@@ -48,24 +79,18 @@ https://github.com/gorhill/Javascript-Voronoi
         ui = app.userInterface;
     }
 
-	var design = adsk.fusion.Design(app.activeProduct);
-	if (!design) {
-		ui.messageBox('No active design', appTitle);
-		adsk.terminate();
-		return;
-	}
-
     // Create the command definition.
     var createCommandDefinition = function() {
         var commandDefinitions = ui.commandDefinitions;
 
         // Be fault tolerant in case the command is already added...
-        var cmDef = commandDefinitions.itemById('VoronoiSketchGenerator');
+        var cmDef = commandDefinitions.itemById(commandId);
         if (!cmDef) {
-            cmDef = commandDefinitions.addButtonDefinition('VoronoiSketchGenerator',
+            cmDef = commandDefinitions.addButtonDefinition(commandId,
                     'Voronoi Sketch Generator',
-                    'Generates a Voronoi sketch.',
-                    './resources'); // relative resource file path is specified
+                    'Voronoi Sketch Generator',
+                    './resources/command'); // relative resource file path is specified
+            cmDef.tooltipDescription = 'Generates a Voronoi sketch'
         }
         return cmDef;
     };
@@ -76,9 +101,6 @@ https://github.com/gorhill/Javascript-Voronoi
             // Connect to the CommandExecuted event.
             var command = args.command;
             command.execute.add(onCommandExecuted);
-
-            // Terminate the script when the command is destroyed
-            command.destroy.add(function () { adsk.terminate(); });
 
             // Define the inputs.
             var inputs = command.commandInputs;
@@ -107,6 +129,12 @@ https://github.com/gorhill/Javascript-Voronoi
     // CommandExecuted event handler.
     var onCommandExecuted = function(args) {
         try {
+            var design = app.activeProduct;
+            if (!design) {
+                ui.messageBox('No active design', appTitle);
+                adsk.terminate();
+                return;
+            }
 
             // Extract input values
             var unitsMgr = app.activeProduct.unitsManager;
@@ -230,6 +258,7 @@ https://github.com/gorhill/Javascript-Voronoi
         }
 
         // Create a sketch on the XY plane to hold the voronoi
+        var design = app.activeProduct;
         var root = design.rootComponent;
         var sketch = root.sketches.add(root.xYConstructionPlane);
         sketch.name = "Voronoi - " + sketch.name;
@@ -258,7 +287,8 @@ https://github.com/gorhill/Javascript-Voronoi
 				createCellPath(sketch, pts, edgeStyle, scale);
 			}
 		}
-	        sketch.isComputeDeferred = false;		
+
+        sketch.isComputeDeferred = false;
 	}
 
 	function createCellPath(sketch, points, edgeStyle, scale, width, height) {
@@ -419,13 +449,22 @@ https://github.com/gorhill/Javascript-Voronoi
 
     // Start of the script...
 	try {
-
         // Create and run command
-        var command = createCommandDefinition();
-        var commandCreatedEvent = command.commandCreated;
+        var commandDef = createCommandDefinition();
+        var commandCreatedEvent = commandDef.commandCreated;
         commandCreatedEvent.add(onCommandCreated);
 
-        command.execute();
+        // add a command on Sketch panel in modeling workspace
+        var workspaces_ = ui.workspaces;
+        var modelingWorkspace_ = workspaces_.itemById(workspaceToUse);
+        var toolbarPanels_ = modelingWorkspace_.toolbarPanels;
+        var toolbarPanel_ = toolbarPanels_.itemById(panelToUse); // add the new command under the fourth panel
+        var toolbarControls_ = toolbarPanel_.controls;
+        var toolbarControl_ = toolbarControls_.itemById(commandId);
+        if (!toolbarControl_) {
+            toolbarControl_ = toolbarControls_.addCommand(commandDef, commandId);
+            toolbarControl_.isVisible = true;
+        }
     }
     catch (e) {
         if (ui) {
@@ -434,4 +473,31 @@ https://github.com/gorhill/Javascript-Voronoi
 
         adsk.terminate();
     }
-}());
+}
+
+function stop(context) {
+    var ui;
+    try {
+        var app = adsk.core.Application.get();
+        ui = app.userInterface;
+        var objArray = [];
+
+        var commandControl_ = commandControlById(commandId);
+        if (commandControl_) {
+            objArray.push(commandControl_);
+        }
+        var commandDefinition_ = commandDefinitionById(commandId);
+        if (commandDefinition_) {
+            objArray.push(commandDefinition_);
+        }
+
+        objArray.forEach(function(obj){
+            destroyObject(ui, obj);
+        });
+
+    } catch (e) {
+        if (ui) {
+            ui.messageBox('AddIn Stop Failed : ' + errorDescription(e));
+        }
+    }
+}

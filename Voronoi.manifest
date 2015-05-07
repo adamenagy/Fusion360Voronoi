@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"d5997dea-3d7a-4804-851f-fe5d2d42f99d",
+	"author":	"Hans Kellner, Autodesk",
+	"description":	{
+		"":	"Voronoi sketch generator"
+	},
+	"version":	"1.0.0",
+	"runOnStartup":	true,
+	"supportedOS":	"windows|mac",
+	"autodeskLibraries":	["application", "dashboard", "geometry", "materials", "userInterface", "utilities", "bRep", "components", "construction", "features", "fusion", "meshBody", "meshData", "sketch", "tSpline"]
+}

@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/TR/REC-html40" xml:lang="en" dir="ltr" class="js">
+<head>
+    <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+    <title>Fusion 360 Exchange - Voronoi Sketch Generator Help</title>
+    <link rel="icon"
+          type="image/png"
+          href="resources/command/32x32.png">
+</head>
+<style>
+    html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, hr, pre, code, form, fieldset, legend, input, textarea, blockquote, table, th, td {
+        padding: 0;
+        margin: 0;
+    }
+
+    a {
+        color: #1F5397;
+        text-decoration: none
+    }
+
+    body, ul {
+        font-family: "Arial", "Helvetica", "sans-serif";
+        font-size: 12.0px;
+        margin: 15px
+    }
+
+    p {
+        font-size: 12.0px;
+        line-height: 16px;
+        padding: 0px;
+        margin: 5px 0px 5px 0px
+    }
+
+    h1 {
+        font-size: 22.0px;
+        height: 26px;
+    }
+
+    .separator-line {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #C3C3C3
+    }
+
+    h2 {
+        font-size: 16.0px;
+        line-height: 18px;
+        height: 16px;
+        margin-bottom: 3px;
+        margin-top: 15px
+    }
+
+    h3 {
+        font-size: 14.0px;
+        line-height: 16px;
+        height: 14px;
+        margin-bottom: 3px;
+        margin-top: 15px
+    }
+
+    #plugin-icon {
+        float: left;
+        width: 94px;
+        height: 94px
+    }
+
+    #plugin-name {
+        margin-left: 94px
+    }
+
+    #plugin-description {
+        margin-left: 94px;
+        margin-top: 3px;
+        margin-bottom: 40px
+    }
+
+    #navigation {
+        margin-bottom: 10px;
+        clear: both
+    }
+
+    .nav-link-spacer {
+        margin: 0px 5px 0px 5px
+    }
+
+    .command {
+        margin-top: 5px;
+        margin-bottom: 3px
+    }
+
+    .command.icon {
+        float: left;
+        width: 34px;
+        height: 34px
+    }
+
+    .command.name {
+        font-weight: bold;
+        padding-top: 4px;
+        margin: 0px 0px 0px 34px
+    }
+
+    .command.description {
+        margin: 0px 0px 0px 34px
+    }
+
+    .versionset {
+        margin-bottom: 5px
+    }
+
+    .version {
+        float: left;
+        width: 50px
+    }
+
+    .versioninfo-bullet {
+        margin-left: 50px
+    }
+
+    .screenshots {
+    }
+
+    .clearboth {
+        clear: both
+    }
+
+    .thumbnail {
+        float: left;
+        width: 207px;
+        margin: 0px 20px 0px 0px
+    }
+
+    .caption {
+        font-weight: bold
+    }
+</style>
+
+<body>
+<div id="plugin-node" class="node right-box content-area">
+    <div class="plugin-help">
+        <div id="heading">
+            <div id="plugin-icon"><img alt="Voronoi Sketch Generator icon" width=64 height=64 src="resources/command/64x64.png"></div>
+            <div id="plugin-name"><h1 class="separator-line">Voronoi Sketch Generator</h1></div>
+            <p id="plugin-description"><strong>Fusion 360</strong> add-in that lets the user generate Voronoi sketches.</p>
+        </div>
+
+        <div id="navigation">
+            Getting Started<span class="nav-link-spacer">|</span>
+            <a href="#Install">Install/Uninstall</a><span class="nav-link-spacer">|</span>
+            <a href="#AdditionalInfo">Additional Information</a><span class="nav-link-spacer">|</span>
+            <a href="#Contact">Contact</a><span class="nav-link-spacer">|</span>
+            <a class="navigation-link" href="#VersionHistory">Version History</a>
+        </div>
+
+        <h2 id="GettingStarted" name="GettingStarted">Getting Started</h2>
+        <p>This add-in allows the user to generate Voronoi sketches by setting a couple of parameters that will affect the generated forms.   </p>
+
+        <p>To use the add-in, click the following command</p>
+
+        <div class="command clearboth">
+            <div class="command icon">
+                <img width=32 height=32 src="resources/command/32x32.png"/>
+            </div>
+            <div class="command name">
+                Voronoi Sketch Generator
+            </div>
+            <div class="command command-description">
+                Runs the command that will pop up a dialog where the parameters for generating a Voronoi sketch can be set.
+                Once created, these sketches may then be used for creating or modifying models.
+            </div>
+        </div>
+
+        <h3>Usage</h3>
+
+        <p>Once installed, the <strong>"Voronoi Sketch Generator"</strong> add-in will create a new button in the menu of the
+            <strong>"Model"</strong> workspace's <strong>"Create"</strong> panel.<br/> 
+
+            <img src="resources/readme/voronoi1.png" alt=""/> <br />
+
+            When running the command these options will be available: <br />
+            <ul>
+                <li>Edge Style : Straight or Curved edges</li>
+                <li>Number of Cells (2-256) : Number of cells created in the sketch</li>
+                <li>Pattern width : Width of the area filled with cells</li>
+                <li>Pattern height : Height of the area filled with cells</li>
+                <li>% to scale cells (10-100) : Percentage to scale down each of the cells</li>
+            </ul>
+
+            <img src="resources/readme/voronoi2.png" alt="" /> <br />
+
+            Once the command finished we'll get something like this.<br />
+
+            <img src="resources/readme/voronoi3.png" alt="" /> <br />
+
+            These then can be used to create or modify models. <br />
+
+            <img src="resources/readme/Voronoi-128-Cells-Copper-sm.png" alt="" /> <br />
+            <img src="resources/readme/Voronoi-256-Cells-Brass-sm.png" alt="" />
+        </p>
+
+
+        <h2 id="Install" name="Install">Installation and Uninstallation</h2>
+
+        <p>
+            You can unload the add-in without uninstalling it by clicking the
+            <strong>"Stop"</strong> button when the add-in is selected in the list box on the <strong>"Add-Ins"</strong>
+            tab of the <strong>"Scripts and Add-Ins"</strong> dialog.<br/>
+            <br/>
+            Unchecking <strong>"Run on Startup"</strong> causes the add-in not to be loaded in future sessions of
+            <strong>Fusion 360</strong>.<br/>
+        </p>
+
+        <h2 id="AdditionalInfo" name="AdditionalInfo">Additional Information</h2>
+
+        <p> The source code for this add-in written in <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> is available inside the add-in's folder or on <a
+                href="https://github.com/hanskellner/Fusion360Voronoi">GitHub</a><br/>
+        <br/>
+        (C) Copyright 2015 by <a href="http://www.autodesk.com">Autodesk, Inc.</a> <br/>
+        <br/>
+        Permission to use, copy, modify, and distribute this software in <br/>
+        object code form for any purpose and without fee is hereby granted, <br/>
+        provided that the above copyright notice appears in all copies and <br/>
+        that both that copyright notice and the limited warranty and restricted <br/>
+        rights notice below appear in all supporting documentation.<br/>
+        <br/>
+        AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS. <br/>
+        AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY OR <br/>
+        FITNESS FOR A PARTICULAR USE. AUTODESK, INC. DOES NOT WARRANT THAT THE <br/>
+        OPERATION OF THE PROGRAM WILL BE UNINTERRUPTED OR ERROR FREE.
+
+            <br /> <br />
+        <strong>Credits:</strong><br />
+
+        This code makes use of the Raymond Hill's well done Javascript-Voronoi code:<br />
+            <a href="https://github.com/gorhill/Javascript-Voronoi">https://github.com/gorhill/Javascript-Voronoi</a>
+        </p>
+
+        <h2 id="Contact" name="Contact">Contact</h2>
+
+        <p>This add-in was written by <a href="http://www.hanskellner.com/">Hans Kellner</a>.<br/>
+            Hans is working in the CTO's office inside Autodesk.<br/>
+        </p>
+
+        <h3>Support Information</h3>
+
+        <p>
+            Email us at <a href="mailto:fusion.apps@autodesk.com">fusion.apps@autodesk.com</a> with feedback or requests
+            for enhancements.
+        </p>
+
+        <h2 id="VersionHistory" name="VersionHistory">Version History</h2>
+
+        <p>
+
+        <div class="versionset">
+            <div class="version">1.0.0</div>
+            <div class="versioninfo-bullet">Original release<br/>
+            </div>
+        </div>
+        </p>
+    </div>
+</div>
+</body>
+</html>
