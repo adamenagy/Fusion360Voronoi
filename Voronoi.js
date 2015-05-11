@@ -47,7 +47,7 @@ var commandControlById = function(id) {
     var workspaces_ = ui.workspaces;
     var modelingWorkspace_ = workspaces_.itemById(workspaceToUse);
     var toolbarPanels_ = modelingWorkspace_.toolbarPanels;
-    var toolbarPanel_ = toolbarPanels_.itemById(panelToUse);
+    var toolbarPanel_ = toolbarPanels_.itemById(panelToUse); 
     var toolbarControls_ = toolbarPanel_.controls;
     var toolbarControl_ = toolbarControls_.itemById(id);
     return toolbarControl_;
@@ -111,7 +111,7 @@ function run(context) {
 
             // ISSUE: Unit type needs to be specified but I just need a unitless value. For unitless
             // I'll have to use string input for now.
-            var countInput = inputs.addStringValueInput('count','Number of Cells (2-256)','16');
+            var countInput = inputs.addStringValueInput('count','Number of Cells (2-100)','16');
 
             var initialValW = adsk.core.ValueInput.createByReal(15.0);
             var widthInput = inputs.addValueInput('width', 'Pattern width', 'cm' , initialValW);
@@ -287,6 +287,11 @@ function run(context) {
 				createCellPath(sketch, pts, edgeStyle, scale);
 			}
 		}
+        
+        // Create a rectangle around the shape
+        sketch.sketchCurves.sketchLines.addTwoPointRectangle(
+            adsk.core.Point3D.create(0, 0, 0),
+            adsk.core.Point3D.create(width, height, 0));
 
         sketch.isComputeDeferred = false;
 	}
